@@ -68,7 +68,8 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
             min_val = min_va_val = np.array([4e1, 1e5, 1e5])
         elif inf_mode == 'merge':
             # for inference mode 'merge', the type of step index is np.ndarray.
-            step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
+            step_idx = tmp_idx = np.arange(n_pred)
+            # step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
             min_val = min_va_val = np.array([4e1, 1e5, 1e5] * len(step_idx))
         else:
             raise ValueError(f'ERROR: test mode "{inf_mode}" is not defined.')
