@@ -111,7 +111,9 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
             tmp_idx = [step_idx]
         elif inf_mode == 'merge':
             # for inference mode 'merge', the type of step index is np.ndarray.
-            step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
+            # FIXME
+            step_idx = tmp_idx = np.arange(n_pred)
+            # step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
         else:
             raise ValueError(f'ERROR: test mode "{inf_mode}" is not defined.')
 
@@ -121,7 +123,9 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
         evl = evaluation(x_test[0:len_test, step_idx + n_his, :, :], y_test, x_stats)
 
         for ix in tmp_idx:
-            te = evl[ix - 2:ix + 1]
+            # FIXME
+            te = evl[ix*3:ix*3+3]
+            # te = evl[ix - 2:ix + 1]
             print(f'Time Step {ix + 1}: MAPE {te[0]:7.3%}; MAE  {te[1]:4.3f}; RMSE {te[2]:6.3f}.')
         print(f'Model Test Time {time.time() - start_time:.3f}s')
     print('Testing model finished!')
