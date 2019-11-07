@@ -57,7 +57,7 @@ def model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min
     :param n_his: int, the length of historical records for training.
     :param n_pred: int, the length of prediction.
     :param step_idx: int or list, index for prediction slice.
-    :param min_va_val: np.ndarray, metric values on validation set.
+    :param min_va_val: np.ndarray, metric values on validation set. init: [4e1, 1e5, 1e5]
     :param min_val: np.ndarray, metric values on test set.
     '''
     x_val, x_test, x_stats = inputs.get_data('val'), inputs.get_data('test'), inputs.get_stats()

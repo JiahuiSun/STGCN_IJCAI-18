@@ -39,6 +39,8 @@ def MAPE(v, v_):
     :param v_: np.ndarray or int, prediction.
     :return: int, MAPE averages on all elements of input.
     '''
+    print("ground truth:", v)
+    print("prediction:", v_)
     return np.mean(np.abs(v_ - v) / (v + 1e-5))
 
 

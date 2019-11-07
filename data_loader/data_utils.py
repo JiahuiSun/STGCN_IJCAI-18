@@ -43,13 +43,14 @@ def seq_gen(len_seq, data_seq, offset, n_frame, n_route, day_slot, C_0=1):
     :param C_0: int, the size of input channel.
     :return: np.ndarray, [len_seq, n_frame, n_route, C_0].
     '''
-    n_slot = day_slot - n_frame + 1
-
+    n_slot = day_slot - n_frame + 1 # how many windows per day
+    # N_windows * n_frame * n_nodes * Dim
     tmp_seq = np.zeros((len_seq * n_slot, n_frame, n_route, C_0))
     for i in range(len_seq):
         for j in range(n_slot):
             sta = (i + offset) * day_slot + j
             end = sta + n_frame
+            # i*n_slot+j window = n_frame * n_nodes * Dim
             tmp_seq[i * n_slot + j, :, :, :] = np.reshape(data_seq[sta:end, :], [n_frame, n_route, C_0])
     return tmp_seq
 
@@ -71,7 +72,7 @@ def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=66):
         data_seq = pd.read_csv(file_path, header=None).values
     except FileNotFoundError:
         print(f'ERROR: input file was not found in {file_path}.')
-
+    # N_windows * n_frame * n_nodes * dim
     seq_train = seq_gen(n_train, data_seq, 0, n_frame, n_route, day_slot)
     seq_val = seq_gen(n_val, data_seq, n_train, n_frame, n_route, day_slot)
     seq_test = seq_gen(n_test, data_seq, n_train + n_val, n_frame, n_route, day_slot)
