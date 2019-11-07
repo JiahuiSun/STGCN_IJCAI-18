@@ -32,7 +32,6 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
 
     # Define model loss
     train_loss, pred = build_model(x, n_his, Ks, Kt, blocks, keep_prob)
-    print("test# pred shape:", pred.shape)
     tf.summary.scalar('train_loss', train_loss)
     copy_loss = tf.add_n(tf.get_collection('copy_loss'))
     tf.summary.scalar('copy_loss', copy_loss)
@@ -91,7 +90,6 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
             start_time = time.time()
             min_va_val, min_val = \
                 model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min_va_val, min_val)
-            print("test# min_va_val shape:", min_va_val.shape)
             for ix in tmp_idx:
                 va, te = min_va_val[ix - 2:ix + 1], min_val[ix - 2:ix + 1]
                 print(f'Time Step {ix + 1}: '
