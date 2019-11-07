@@ -74,6 +74,7 @@ def temporal_conv_layer(x, Kt, c_in, c_out, act_func='relu'):
         x_input = x
 
     # keep the original input for residual connection.
+    # NOTE: that is so-called residual connection.
     x_input = x_input[:, Kt - 1:T, :, :]
 
     if act_func == 'GLU':
@@ -82,6 +83,7 @@ def temporal_conv_layer(x, Kt, c_in, c_out, act_func='relu'):
         tf.add_to_collection(name='weight_decay', value=tf.nn.l2_loss(wt))
         bt = tf.get_variable(name='bt', initializer=tf.zeros([2 * c_out]), dtype=tf.float32)
         x_conv = tf.nn.conv2d(x, wt, strides=[1, 1, 1, 1], padding='VALID') + bt
+        # gated mechanism, the reason why 2*c_out
         return (x_conv[:, :, :, 0:c_out] + x_input) * tf.nn.sigmoid(x_conv[:, :, :, -c_out:])
     else:
         wt = tf.get_variable(name='wt', shape=[Kt, 1, c_in, c_out], dtype=tf.float32)
