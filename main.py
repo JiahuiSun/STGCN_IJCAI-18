@@ -28,7 +28,7 @@ import argparse
 # n_route: 165, window: 15min, n_his: 4, n_pred: 1
 # date_slot = 16.5*4 = 66, frames: 4 + 1=5
 # 30 days, 22 for train, 4 for val, 4 for test
-
+# window: 30min, 16.5*2 = 33
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_route', type=int, default=165)
 parser.add_argument('--n_his', type=int, default=12)
