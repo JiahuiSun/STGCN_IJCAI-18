@@ -66,7 +66,7 @@ tf.add_to_collection(name='graph_kernel', value=tf.cast(tf.constant(Lk), tf.floa
 
 # Data Preprocessing
 data_file = f'shenzhen_V_{n}.csv'
-n_train, n_val, n_test = 22, 4, 4
+n_train, n_val, n_test = 16, 2, 12
 PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred)
 print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
 
