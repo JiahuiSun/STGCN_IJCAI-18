@@ -77,7 +77,8 @@ def evaluation(y, y_, x_stats):
     :return: np.ndarray, averaged metric values.
     '''
     dim = len(y_.shape)
-
+    print("ground truth shape:", y.shape)
+    print("predict shape:", y_.shape)
     if dim == 3:
         # single_step case
         v = z_inverse(y, x_stats['mean'], x_stats['std'])
@@ -92,4 +93,6 @@ def evaluation(y, y_, x_stats):
         for i in range(y_.shape[0]):
             tmp_res = evaluation(y[i], y_[i], x_stats)
             tmp_list.append(tmp_res)
+        print("tmp_list len:", len(tmp_list))
+        print("tmp_list:", tmp_list)
         return np.concatenate(tmp_list, axis=-1)
