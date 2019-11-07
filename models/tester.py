@@ -66,8 +66,6 @@ def model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min
         raise ValueError(f'ERROR: the value of n_pred "{n_pred}" exceeds the length limit.')
 
     y_val, len_val = multi_pred(sess, pred, x_val, batch_size, n_his, n_pred, step_idx)
-    print("test# len_val:", len_val)
-    print("test# y_val shape:", y_val.shape)
     evl_val = evaluation(x_val[0:len_val, step_idx + n_his, :, :], y_val, x_stats)
 
     # chks: indicator that reflects the relationship of values between evl_val and min_va_val.
