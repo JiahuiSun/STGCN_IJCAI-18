@@ -43,6 +43,7 @@ def seq_gen(len_seq, data_seq, offset, n_frame, n_route, day_slot, C_0=1):
     :param C_0: int, the size of input channel.
     :return: np.ndarray, [len_seq, n_frame, n_route, C_0].
     '''
+    # len_seq: how many days; data_seq: all datas; offset: start point; n_frame: n_hist+n_pred; day_slot=interval/day
     n_slot = day_slot - n_frame + 1 # how many windows per day
     # N_windows * n_frame * n_nodes * Dim
     tmp_seq = np.zeros((len_seq * n_slot, n_frame, n_route, C_0))
