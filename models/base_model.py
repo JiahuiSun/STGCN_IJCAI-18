@@ -29,7 +29,6 @@ def build_model(inputs, n_his, Ks, Kt, blocks, keep_prob):
     for i, channels in enumerate(blocks):
         x = st_conv_block(x, Ks, Kt, channels, i, keep_prob, act_func='GLU')
         # TODO: why the output dim is like this? because we have two conv, each - (ks-1)?
-        # why ks-1 other than kt-1 ?
         Ko -= 2 * (Ks - 1)
 
     # Output Layer
@@ -38,10 +37,9 @@ def build_model(inputs, n_his, Ks, Kt, blocks, keep_prob):
     else:
         raise ValueError(f'ERROR: kernel size Ko must be greater than 1, but received "{Ko}".')
     # TODO: what is copy loss? inputs[:, 11:12, :, :] inputs[:, 12:13, :, :]
-    # why inputs - inputs l2 loss ?
     tf.add_to_collection(name='copy_loss',
                          value=tf.nn.l2_loss(inputs[:, n_his - 1:n_his, :, :] - inputs[:, n_his:n_his + 1, :, :]))
-    # TODO: trainning loss
+    # TODO: trainning loss shape
     print("#test the output shape of y:", y.shape)
     train_loss = tf.nn.l2_loss(y - inputs[:, n_his:n_his + 1, :, :])
     single_pred = y[:, 0, :, :]

@@ -33,6 +33,7 @@ def multi_pred(sess, y_pred, seq, batch_size, n_his, n_pred, step_idx, dynamic_b
         # Note: use np.copy() to avoid the modification of source data.
         test_seq = np.copy(i[:, 0:n_his + 1, :, :])
         step_list = []
+        # NOTE: here so called multi-step prediction
         for j in range(n_pred):
             pred = sess.run(y_pred,
                             feed_dict={'data_input:0': test_seq, 'keep_prob:0': 1.0})
