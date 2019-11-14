@@ -37,6 +37,7 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
     tf.summary.scalar('copy_loss', copy_loss)
 
     # Learning rate settings
+    # len_train = 18*(day_slot-n_frame+1)
     global_steps = tf.Variable(0, trainable=False)
     len_train = inputs.get_len('train')
     if len_train % batch_size == 0:
