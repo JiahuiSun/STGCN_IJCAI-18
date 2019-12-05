@@ -30,7 +30,7 @@ import argparse
 # 30 days, 22 for train, 4 for val, 4 for test
 # window: 30min, 16.5*2 = 33
 parser = argparse.ArgumentParser()
-parser.add_argument('--n_route', type=int, default=165)
+parser.add_argument('--n_route', type=int, default=228)
 parser.add_argument('--n_his', type=int, default=12)
 parser.add_argument('--n_pred', type=int, default=1)
 parser.add_argument('--batch_size', type=int, default=50)
@@ -53,7 +53,7 @@ blocks = [[1, 32, 64], [64, 32, 128]]
 
 # Load wighted adjacency matrix W
 if args.graph == 'default':
-    W = weight_matrix(pjoin('./dataset', f'shenzhen_W_{n}.csv'))
+    W = weight_matrix(pjoin('./dataset', f'PeMSD7_W_{n}.csv'))
 else:
     # load customized graph weight matrix
     W = weight_matrix(pjoin('./dataset', args.graph))
@@ -65,9 +65,15 @@ Lk = cheb_poly_approx(L, Ks, n)
 tf.add_to_collection(name='graph_kernel', value=tf.cast(tf.constant(Lk), tf.float32))
 
 # Data Preprocessing
-data_file = f'shenzhen_V_{n}.csv'
-n_train, n_val, n_test = 16, 2, 12
-PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred)
+# data_file = f'PeMSD7_V_{n}.csv'
+data_file = f'PeMSD7_V_{n}.csv'
+
+n_train, n_val, n_test = 34, 5, 5
+# train: val: test = 0.6, 0.2, 0.2
+# n_train, n_val, n_test = 15, 5, 5
+
+# NOTE: day_slot is calculated by interval, 10 min for example, (23.5-6)*60/10=105
+PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=105)
 print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
 
 if __name__ == '__main__':

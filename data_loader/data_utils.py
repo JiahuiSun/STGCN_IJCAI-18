@@ -56,7 +56,7 @@ def seq_gen(len_seq, data_seq, offset, n_frame, n_route, day_slot, C_0=1):
     return tmp_seq
 
 
-def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=33):
+def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=288):
     '''
     Source file load and dataset generation.
     :param file_path: str, the file path of data source.
