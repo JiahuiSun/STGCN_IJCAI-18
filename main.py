@@ -8,7 +8,7 @@
 
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 from os.path import join as pjoin
 
 import tensorflow as tf
@@ -41,7 +41,7 @@ parser.add_argument('--kt', type=int, default=3)
 parser.add_argument('--lr', type=float, default=1e-3)
 parser.add_argument('--opt', type=str, default='RMSProp')
 parser.add_argument('--graph', type=str, default='default')
-parser.add_argument('--inf_mode', type=str, default='merge')
+parser.add_argument('--inf_mode', type=str, default='sep')
 
 args = parser.parse_args()
 print(f'Training configs: {args}')
