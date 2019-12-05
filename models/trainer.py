@@ -54,20 +54,21 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
             train_op = tf.train.AdamOptimizer(lr).minimize(train_loss)
         else:
             raise ValueError(f'ERROR: optimizer "{opt}" is not defined.')
-
+    # TODO: what does this mean?
     merged = tf.summary.merge_all()
-
     with tf.Session() as sess:
         writer = tf.summary.FileWriter(pjoin(sum_path, 'train'), sess.graph)
         sess.run(tf.global_variables_initializer())
 
         if inf_mode == 'sep':
             # for inference mode 'sep', the type of step index is int.
+            # n_pred=3; step_idx=2; tmp_idx=[2]
             step_idx = n_pred - 1
             tmp_idx = [step_idx]
             min_val = min_va_val = np.array([4e1, 1e5, 1e5])
         elif inf_mode == 'merge':
             # for inference mode 'merge', the type of step index is np.ndarray.
+            # step_idx=tmp_idx=[2]
             step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
             min_val = min_va_val = np.array([4e1, 1e5, 1e5] * len(step_idx))
         else:
@@ -83,15 +84,17 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
                     loss_value = \
                         sess.run([train_loss, copy_loss],
                                  feed_dict={x: x_batch[:, 0:n_his + 1, :, :], keep_prob: 1.0})
+                    # TODO: what does sess.run output mean?
                     print(f'Epoch {i:2d}, Step {j:3d}: [{loss_value[0]:.3f}, {loss_value[1]:.3f}]')
             print(f'Epoch {i:2d} Training Time {time.time() - start_time:.3f}s')
 
             start_time = time.time()
+            # TODO: what is pred?
             min_va_val, min_val = \
                 model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min_va_val, min_val)
-
-            for ix in tmp_idx:
-                va, te = min_va_val[ix - 2:ix + 1], min_val[ix - 2:ix + 1]
+            for i, ix in enumerate(tmp_idx):
+                # va, te = min_va_val[ix - 2:ix + 1], min_val[ix - 2:ix + 1]
+                va, te = min_va_val[i*3:(i+1)*3], min_val[i*3:(i+1)*3]
                 print(f'Time Step {ix + 1}: '
                       f'MAPE {va[0]:7.3%}, {te[0]:7.3%}; '
                       f'MAE  {va[1]:4.3f}, {te[1]:4.3f}; '

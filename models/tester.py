@@ -39,6 +39,7 @@ def multi_pred(sess, y_pred, seq, batch_size, n_his, n_pred, step_idx, dynamic_b
             if isinstance(pred, list):
                 pred = np.array(pred[0])
             test_seq[:, 0:n_his - 1, :, :] = test_seq[:, 1:n_his, :, :]
+            # NOTE: use prediction to predict next step per batch
             test_seq[:, n_his - 1, :, :] = pred
             step_list.append(pred)
         pred_list.append(step_list)
@@ -118,8 +119,9 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
         y_test, len_test = multi_pred(test_sess, pred, x_test, batch_size, n_his, n_pred, step_idx)
         evl = evaluation(x_test[0:len_test, step_idx + n_his, :, :], y_test, x_stats)
 
-        for ix in tmp_idx:
-            te = evl[ix - 2:ix + 1]
+        for i, ix in enumerate(tmp_idx):
+            # te = evl[ix - 2:ix + 1]
+            te = evl[i*3:(i+1)*3]
             print(f'Time Step {ix + 1}: MAPE {te[0]:7.3%}; MAE  {te[1]:4.3f}; RMSE {te[2]:6.3f}.')
         print(f'Model Test Time {time.time() - start_time:.3f}s')
     print('Testing model finished!')
