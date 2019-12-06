@@ -24,23 +24,19 @@ from models.tester import model_test
 
 import argparse
 
-# params states
-# n_route: 165, window: 15min, n_his: 4, n_pred: 1
-# date_slot = 16.5*4 = 66, frames: 4 + 1=5
-# 30 days, 22 for train, 4 for val, 4 for test
-# window: 30min, 16.5*2 = 33
 parser = argparse.ArgumentParser()
-parser.add_argument('--n_route', type=int, default=228)
-parser.add_argument('--n_his', type=int, default=12)
+parser.add_argument('--n_route', type=int, default=81)
+parser.add_argument('--interval', type=int, default=10)
+parser.add_argument('--n_his', type=int, default=9)
 parser.add_argument('--n_pred', type=int, default=1)
 parser.add_argument('--batch_size', type=int, default=50)
 parser.add_argument('--epoch', type=int, default=50)
-parser.add_argument('--save', type=int, default=10)
+parser.add_argument('--save', type=int, default=2)
 parser.add_argument('--ks', type=int, default=3)
 parser.add_argument('--kt', type=int, default=3)
 parser.add_argument('--lr', type=float, default=1e-3)
 parser.add_argument('--opt', type=str, default='RMSProp')
-parser.add_argument('--graph', type=str, default='default')
+parser.add_argument('--graph', type=str, default='hangzhou_metro_roadmap.csv')
 parser.add_argument('--inf_mode', type=str, default='sep')
 
 args = parser.parse_args()
@@ -64,16 +60,16 @@ L = scaled_laplacian(W)
 Lk = cheb_poly_approx(L, Ks, n)
 tf.add_to_collection(name='graph_kernel', value=tf.cast(tf.constant(Lk), tf.float32))
 
-# Data Preprocessing
+# day_slot = 288
 # data_file = f'PeMSD7_V_{n}.csv'
-data_file = f'PeMSD7_V_{n}.csv'
+# n_train, n_val, n_test = 34, 5, 5
 
-n_train, n_val, n_test = 34, 5, 5
-# train: val: test = 0.6, 0.2, 0.2
-# n_train, n_val, n_test = 15, 5, 5
+interval = args.interval
+day_slot = int(17.5 * 60 / interval)
+data_file = 'hangzhou_metro_20190101_20190125_int%d.csv'%interval
+n_train, n_val, n_test = 15, 5, 5
 
-# NOTE: day_slot is calculated by interval, 10 min for example, (23.5-6)*60/10=105
-PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=105)
+PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=day_slot)
 print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
 
 if __name__ == '__main__':

@@ -111,9 +111,7 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
             tmp_idx = [step_idx]
         elif inf_mode == 'merge':
             # for inference mode 'merge', the type of step index is np.ndarray.
-            # FIXME
-            step_idx = tmp_idx = np.arange(n_pred)
-            # step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
+            step_idx = tmp_idx = np.arange(3, n_pred + 1, 3) - 1
         else:
             raise ValueError(f'ERROR: test mode "{inf_mode}" is not defined.')
 
