@@ -29,7 +29,7 @@ def build_model(inputs, n_his, Ks, Kt, blocks, keep_prob):
     for i, channels in enumerate(blocks):
         x = st_conv_block(x, Ks, Kt, channels, i, keep_prob, act_func='GLU')
         # TODO: why the output dim is like this? because we have two conv, each - (ks-1)?
-        Ko -= 2 * (Ks - 1)
+        Ko -= 2 * (Kt - 1)
 
     # Output Layer
     if Ko > 1:

@@ -148,6 +148,7 @@ def st_conv_block(x, Ks, Kt, channels, scope, keep_prob, act_func='GLU'):
     :param act_func: str, activation function.
     :return: tensor, [batch_size, time_step, n_route, c_out].
     '''
+    # [1, 32, 64], [64, 32, 128]
     c_si, c_t, c_oo = channels
 
     with tf.variable_scope(f'stn_block_{scope}_in'):
