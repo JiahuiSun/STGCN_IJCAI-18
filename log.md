@@ -1,13 +1,13 @@
 ### Parameters
-- 17.5*(60/interval)=105 timesteps
-- 105 - n_frame + 1 windows
+- len: hangzhou 17.5h; shenzhen 16.5h
+- len*(60/interval) timestamps
+- (timestamps - n_frame + 1) windows
 - 15 5 5 train val test
-- 15*windows all windows
-- batch = (all windows) / batch_size 
+- batch = (15*windows) / batch_size 
 
 ### Experiments
-1. 
-n_pred=10, lr=0.001
+1. n_pred=10, lr=0.001, interval=30
+
 | batch size | MAPE | MAE | RMSE |
 | --- | --- | --- | --- |
 | 16  | 4.106 | 10.242 | 15.177 |
@@ -18,6 +18,6 @@ n_pred=10, lr=0.001
 | 256 | 14.089 | 65.057 | 213.309 |
 
 ### TODO
-- 代码无法用更少的历史数据预测
+- 代码无法用更少的历史数据预测：因为卷积核大小为3
 - batch越小RMSE越小？
-- 输出的是什么含义？
+- Time Step 1: MAPE  9.517%,  9.517%; MAE  37.436, 37.436; RMSE 86.654, 86.654. 后两项总是一样什么含义？
