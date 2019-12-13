@@ -10,8 +10,11 @@ import os
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 from os.path import join as pjoin
-
+import numpy as np
 import tensorflow as tf
+
+np.random.seed(1)
+tf.set_random_seed(1)
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -29,7 +32,7 @@ parser.add_argument('--n_route', type=int, default=81)
 parser.add_argument('--interval', type=int, default=10)
 parser.add_argument('--n_his', type=int, default=10)
 parser.add_argument('--n_pred', type=int, default=1)
-parser.add_argument('--batch_size', type=int, default=50)
+parser.add_argument('--batch_size', type=int, default=256)
 parser.add_argument('--epoch', type=int, default=50)
 parser.add_argument('--save', type=int, default=2)
 parser.add_argument('--ks', type=int, default=3)
@@ -82,4 +85,3 @@ print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
 if __name__ == '__main__':
     model_train(PeMS, blocks, args)
     model_test(PeMS, PeMS.get_len('test'), n_his, n_pred, args.inf_mode)
-    print()

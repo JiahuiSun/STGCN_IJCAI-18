@@ -8,7 +8,7 @@ st=`date +"%y%m%d-%H%M"`
 if [ ! -d './output/result' ]; then
     mkdir -p './output/result'
 fi
-out_log=./output/result/${st}.log
+out_log=./output/result/${city}_${inter}_${st}.log
 
 python main.py --n_route ${n_route} \
                --interval ${inter} \

@@ -71,6 +71,7 @@ def model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min
     evl_val = evaluation(x_val[0:len_val, step_idx + n_his, :, :], y_val, x_stats)
 
     # chks: indicator that reflects the relationship of values between evl_val and min_va_val.
+    # 只要三个指标有一个减小的，就更新
     chks = evl_val < min_va_val
     # update the metric on test set, if model's performance got improved on the validation.
     if sum(chks):

@@ -85,12 +85,12 @@ def model_train(inputs, blocks, args, sum_path='./output/tensorboard'):
                     loss_value = \
                         sess.run([train_loss, copy_loss],
                                  feed_dict={x: x_batch[:, 0:n_his + 1, :, :], keep_prob: 1.0})
-                    # TODO: what does sess.run output mean?
+                    # train loss, copy loss
                     print(f'Epoch {i:2d}, Step {j:3d}: [{loss_value[0]:.3f}, {loss_value[1]:.3f}]')
             print(f'Epoch {i:2d} Training Time {time.time() - start_time:.3f}s')
 
             start_time = time.time()
-            # TODO: what is pred?
+            # TODO: 为什么现在会有test value？之后不才test吗？
             min_va_val, min_val = \
                 model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min_va_val, min_val)
             for j, ix in enumerate(tmp_idx):
