@@ -40,7 +40,6 @@ def build_model(inputs, n_his, Ks, Kt, blocks, keep_prob):
     tf.add_to_collection(name='copy_loss',
                          value=tf.nn.l2_loss(inputs[:, n_his - 1:n_his, :, :] - inputs[:, n_his:n_his + 1, :, :]))
     # TODO: trainning loss shape
-    print("#test the output shape of y:", y.shape)
     train_loss = tf.nn.l2_loss(y - inputs[:, n_his:n_his + 1, :, :])
     single_pred = y[:, 0, :, :]
     tf.add_to_collection(name='y_pred', value=single_pred)
