@@ -1,8 +1,8 @@
 city=${1:-hangzhou}
 n_route=${2:-81}
-batch=${6:-128}
-epoch=${5:-100}
-n_his=${4:-10}
+batch=${3:-128}
+epoch=${4:-100}
+n_his=${5:-10}
 
 st=`date +"%y%m%d-%H%M"`
 if [ ! -d './output/result' ]; then
