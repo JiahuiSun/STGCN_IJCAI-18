@@ -56,7 +56,7 @@ def seq_gen(len_seq, data_seq, offset, n_frame, n_route, day_slot, C_0=1):
     return tmp_seq
 
 
-def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=288):
+def data_gen(args, file_path, data_config, n_route, n_frame=5, day_slot=288):
     '''
     Source file load and dataset generation.
     :param file_path: str, the file path of data source.
@@ -67,6 +67,8 @@ def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=288):
     :param day_slot: int, the number of time slots per day, controlled by the time window (5 min as default).
     :return: dict, dataset that contains training, validation and test with stats.
     '''
+    city, inter, batch_size = args.n_route, args.interval, args.batch_size
+
     n_train, n_val, n_test = data_config
     # generate training, validation and test data
     try:
@@ -77,6 +79,9 @@ def data_gen(file_path, data_config, n_route, n_frame=5, day_slot=288):
     seq_train = seq_gen(n_train, data_seq, 0, n_frame, n_route, day_slot)
     seq_val = seq_gen(n_val, data_seq, n_train, n_frame, n_route, day_slot)
     seq_test = seq_gen(n_test, data_seq, n_train + n_val, n_frame, n_route, day_slot)
+    # save ground_truth
+    print('Save ground truth')
+    np.save('ground_truth.npy', seq_test)
 
     # x_stats: dict, the stats for the train dataset, including the value of mean and standard deviation.
     x_stats = {'mean': np.mean(seq_train), 'std': np.std(seq_train)}

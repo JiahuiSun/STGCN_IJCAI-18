@@ -1,7 +1,7 @@
 city=${1:-hangzhou}
 n_route=${2:-81}
-inter=${3:-30}
-batch=${6:-128}
+inter=${3:-45}
+batch=${6:-50}
 epoch=${5:-100}
 n_his=${4:-10}
 

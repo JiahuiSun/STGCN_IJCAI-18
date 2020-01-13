@@ -12,9 +12,10 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 from os.path import join as pjoin
 import numpy as np
 import tensorflow as tf
+import time
 
-np.random.seed(1)
-tf.set_random_seed(1)
+np.random.seed(42)
+tf.set_random_seed(42)
 
 config = tf.ConfigProto()
 config.gpu_options.allow_growth = True
@@ -81,9 +82,11 @@ else:
     else:
         raise ValueError(f'ERROR: "{args.n_route}" is wrong station number.')
 
-PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=day_slot)
+PeMS = data_gen(args, pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=day_slot)
 print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
 
 if __name__ == '__main__':
+    st = time.time()
     model_train(PeMS, blocks, args)
-    model_test(PeMS, PeMS.get_len('test'), n_his, n_pred, args.inf_mode)
+    model_test(args, PeMS, PeMS.get_len('test'), n_his, n_pred, args.inf_mode)
+    print(f"Finish train and test: {time.time()-st:.0f}s")

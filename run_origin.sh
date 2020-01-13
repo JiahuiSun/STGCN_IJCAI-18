@@ -12,6 +12,6 @@ out_log=./output/result/${city}_${inter}_${batch}_${n_his}.log
 
 python main.py --n_route 228 \
                --n_his 12 \
-               --epoch 100 \
-               --batch_size 50 \
+               --epoch 50 \
+               --batch_size 10 \
                --graph 'default'

@@ -6,7 +6,7 @@
 # @Github   : https://github.com/VeritasYin/Project_Orion
 
 from data_loader.data_utils import gen_batch
-from utils.math_utils import evaluation
+from utils.math_utils import evaluation, z_inverse
 from os.path import join as pjoin
 
 import tensorflow as tf
@@ -82,7 +82,7 @@ def model_inference(sess, pred, inputs, batch_size, n_his, n_pred, step_idx, min
     return min_va_val, min_val
 
 
-def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/models/'):
+def model_test(args, inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/models/'):
     '''
     Load and test saved model from the checkpoint.
     :param inputs: instance of class Dataset, data source for test.
@@ -92,6 +92,8 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
     :param inf_mode: str, test mode - 'merge / multi-step test' or 'separate / single-step test'.
     :param load_path: str, the path of loaded model.
     '''
+    city, inter, batch_size = args.n_route, args.interval, args.batch_size
+
     start_time = time.time()
     model_path = tf.train.get_checkpoint_state(load_path).model_checkpoint_path
 
@@ -117,8 +119,11 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
             raise ValueError(f'ERROR: test mode "{inf_mode}" is not defined.')
 
         x_test, x_stats = inputs.get_data('test'), inputs.get_stats()
-
         y_test, len_test = multi_pred(test_sess, pred, x_test, batch_size, n_his, n_pred, step_idx)
+        v_ = z_inverse(y_test, x_stats['mean'], x_stats['std'])
+        print('Save test prediction')
+        np.save(f'test_pred_{city}_{inter}_{batch_size}.npy', v_)
+
         evl = evaluation(x_test[0:len_test, step_idx + n_his, :, :], y_test, x_stats)
 
         for i, ix in enumerate(tmp_idx):
@@ -126,6 +131,6 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
             te = evl[i*3:(i+1)*3]
             print(f'Time Step {ix + 1}: MAPE {te[0]:7.3%}; MAE  {te[1]:4.3f}; RMSE {te[2]:6.3f}.')
             print(f'| MAPE | MAE | RMSE |')
-            print(f'| {te[0]:7.3f} | {te[1]:4.3f} | {te[2]:6.3f} |')
+            print(f'| {te[0]:7.3%} | {te[1]:4.3f} | {te[2]:6.3f} |')
         print(f'Model Test Time {time.time() - start_time:.3f}s')
     print('Testing model finished!')
