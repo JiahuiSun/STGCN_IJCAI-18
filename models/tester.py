@@ -125,5 +125,7 @@ def model_test(inputs, batch_size, n_his, n_pred, inf_mode, load_path='./output/
             # te = evl[ix - 2:ix + 1]
             te = evl[i*3:(i+1)*3]
             print(f'Time Step {ix + 1}: MAPE {te[0]:7.3%}; MAE  {te[1]:4.3f}; RMSE {te[2]:6.3f}.')
+            print(f'| MAPE | MAE | RMSE |')
+            print(f'| {te[0]:7.3f} | {te[1]:4.3f} | {te[2]:6.3f} |')
         print(f'Model Test Time {time.time() - start_time:.3f}s')
     print('Testing model finished!')

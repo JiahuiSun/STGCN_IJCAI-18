@@ -52,6 +52,7 @@ blocks = [[1, 32, 64], [64, 32, 128]]
 
 # Load wighted adjacency matrix W
 if args.graph == 'default':
+    print('Running original code')
     W = weight_matrix(pjoin('./dataset', f'PeMSD7_W_{n}.csv'))
 else:
     # load customized graph weight matrix
@@ -63,21 +64,22 @@ L = scaled_laplacian(W)
 Lk = cheb_poly_approx(L, Ks, n)
 tf.add_to_collection(name='graph_kernel', value=tf.cast(tf.constant(Lk), tf.float32))
 
-# day_slot = 288
-# data_file = f'PeMSD7_V_{n}.csv'
-# n_train, n_val, n_test = 34, 5, 5
-
-interval = args.interval
-if args.n_route == 81:
-    data_file = 'hangzhou_metro_20190101_20190125_int%d.csv'%interval
-    day_slot = int(17.5 * 60 / interval)
-    n_train, n_val, n_test = 15, 5, 5
-elif args.n_route == 165:
-    data_file = 'shenzhen_metro_20170601_20170630_int%d.csv'%interval
-    day_slot = int(16.5 * 60 / interval)
-    n_train, n_val, n_test = 18, 6, 6
+if args.graph == 'default':
+    day_slot = 288
+    data_file = f'PeMSD7_V_{n}.csv'
+    n_train, n_val, n_test = 34, 5, 5
 else:
-    raise ValueError(f'ERROR: "{args.n_route}" is wrong station number.')
+    interval = args.interval
+    if args.n_route == 81:
+        data_file = 'hangzhou_metro_20190101_20190125_int%d.csv'%interval
+        day_slot = int(17.5 * 60 / interval)
+        n_train, n_val, n_test = 15, 5, 5
+    elif args.n_route == 165:
+        data_file = 'shenzhen_metro_20170601_20170630_int%d.csv'%interval
+        day_slot = int(16.5 * 60 / interval)
+        n_train, n_val, n_test = 18, 6, 6
+    else:
+        raise ValueError(f'ERROR: "{args.n_route}" is wrong station number.')
 
 PeMS = data_gen(pjoin('./dataset', data_file), (n_train, n_val, n_test), n, n_his + n_pred, day_slot=day_slot)
 print(f'>> Loading dataset with Mean: {PeMS.mean:.2f}, STD: {PeMS.std:.2f}')
