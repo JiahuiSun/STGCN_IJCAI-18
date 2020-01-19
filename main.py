@@ -8,7 +8,6 @@
 
 import os
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 from os.path import join as pjoin
 import numpy as np
 import tensorflow as tf
@@ -16,10 +15,6 @@ import time
 
 np.random.seed(42)
 tf.set_random_seed(42)
-
-config = tf.ConfigProto()
-config.gpu_options.allow_growth = True
-tf.Session(config=config)
 
 from utils.math_graph import *
 from data_loader.data_utils import *
@@ -29,13 +24,14 @@ from models.tester import model_test
 import argparse
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--n_route', type=int, default=81)
-parser.add_argument('--interval', type=int, default=10)
+parser.add_argument('--n_route', type=int, default=165)
+parser.add_argument('--cuda', type=int, default=0)
+parser.add_argument('--interval', type=int, default=30)
 parser.add_argument('--n_his', type=int, default=10)
 parser.add_argument('--n_pred', type=int, default=1)
-parser.add_argument('--batch_size', type=int, default=256)
-parser.add_argument('--epoch', type=int, default=50)
-parser.add_argument('--save', type=int, default=2)
+parser.add_argument('--batch_size', type=int, default=32)
+parser.add_argument('--epoch', type=int, default=100)
+parser.add_argument('--save', type=int, default=10)
 parser.add_argument('--ks', type=int, default=3)
 parser.add_argument('--kt', type=int, default=3)
 parser.add_argument('--lr', type=float, default=1e-3)
@@ -45,6 +41,11 @@ parser.add_argument('--inf_mode', type=str, default='sep')
 
 args = parser.parse_args()
 print(f'Training configs: {args}')
+
+os.environ["CUDA_VISIBLE_DEVICES"] = f'{args.cuda}'
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True
+tf.Session(config=config)
 
 n, n_his, n_pred = args.n_route, args.n_his, args.n_pred
 Ks, Kt = args.ks, args.kt
