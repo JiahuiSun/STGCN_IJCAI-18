@@ -39,11 +39,8 @@ def MAPE(v, v_):
     :param v_: np.ndarray or int, prediction.
     :return: int, MAPE averages on all elements of input.
     '''
-    # print("ground truth is 0 num:", np.sum(v==0))
-    # print("prediction shape:", v_.shape)
-    # test = np.mean(np.abs(v_[np.nonzero(v)] - v[np.nonzero(v)]) / (v[np.nonzero(v)] + 1e-5))
-    # print("remove 0 mape:", test)
-    return np.mean(np.abs(v_[np.nonzero(v)] - v[np.nonzero(v)]) / (v[np.nonzero(v)] + 1e-5))
+    # return np.mean(np.abs(v_[np.nonzero(v)] - v[np.nonzero(v)]) / (v[np.nonzero(v)] + 1e-5))
+    return np.mean(np.abs(v_[v>=10] - v[v>=10]) / v[v>=10])
     # return np.mean(np.abs(v_ - v) / (v + 1e-5))
 
 

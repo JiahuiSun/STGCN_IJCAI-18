@@ -74,11 +74,11 @@ else:
     if args.n_route == 81:
         data_file = 'hangzhou_metro_20190101_20190125_int%d.csv'%interval
         day_slot = int(17.5 * 60 / interval)
-        n_train, n_val, n_test = 15, 5, 5
+        n_train, n_val, n_test = 17, 3, 5
     elif args.n_route == 165:
         data_file = 'shenzhen_metro_20170601_20170630_int%d.csv'%interval
         day_slot = int(16.5 * 60 / interval)
-        n_train, n_val, n_test = 18, 6, 6
+        n_train, n_val, n_test = 21, 3, 6
     else:
         raise ValueError(f'ERROR: "{args.n_route}" is wrong station number.')
 
